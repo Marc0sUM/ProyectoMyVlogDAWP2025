@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>MyVlog</title>
+        <meta charset="UTF-8"/>        
+
+    </head>
+    <body>
+        <header th:replace="~{layout/headerButton :: header}"/>
+        <section th:replace="~{dashboard/contenido :: section}"/>
+        <footer th:replace="~{layout/footer :: footer}"/>
+    </body>
+</html>

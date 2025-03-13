@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:fragment="head">
+        <title>MyVlog</title>
+        <meta charset="UTF-8">
+            <script th:src="@{/js/rutinas.js}"></script>
+            <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+            <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet"/>
+            <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+            <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+            <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    </head>
+    <body>
+         <section th:fragment="section" class="section py-5">
+            <div class="container">
+                <div class="row g-5">
+                    <!-- Card Perfil -->
+                    <div class="col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="fa-solid fa-user fa-3x text-primary mb-3"></i>
+                                <h5 class="card-title">Perfil</h5>
+                                <p class="card-text">Gestiona tu información personal.</p>
+                                <a th:href="@{/perfil}" class="btn btn-primary">Ir al Perfil</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Crear Post -->
+                    <div class="col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="fa-solid fa-plus fa-3x text-success mb-3"></i>
+                                <h5 class="card-title">Crear Post</h5>
+                                <p class="card-text">Comparte tus pensamientos con la comunidad.</p>
+                                <a th:href="@{/crear-post}" class="btn btn-success">Crear Post</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Lista-->
+                    <div class="col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="fa-solid fa-list fa-3x text-warning mb-3"></i>
+                                <h5 class="card-title">Lista de Posts</h5>
+                                <p class="card-text">Explora publicaciones de otros usuarios.</p>
+                                <a th:href="@{/lista-posts}" class="btn btn-warning">Ver Posts</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card About -->
+                    <div class="col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="fa-solid fa-info-circle fa-3x text-info mb-3"></i>
+                                <h5 class="card-title">Acerca de</h5>
+                                <p class="card-text">Conoce más sobre esta aplicación.</p>
+                                <a th:href="@{/about}" class="btn btn-info">Más Información</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
