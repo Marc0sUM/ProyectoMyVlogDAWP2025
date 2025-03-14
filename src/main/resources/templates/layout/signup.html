@@ -1,18 +1,9 @@
 <!DOCTYPE html>
+
 <html  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
-    <head th:fragment="head">
+    <head th:replace="~{layout/header :: head}">
         <title>MyVlog</title>
         <meta charset="UTF-8">
-            <script th:src="@{/js/rutinas.js}"></script>
-            <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
-            <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet"/>
-            <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-            <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-            <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-    </head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         <div th:fragment="signup" class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
@@ -21,12 +12,12 @@
                     <div class="card-header bg-primary text-white text-center">
                         <h5 class="card-title text-center ">Sign Up</h5>
                     </div>
-                    <form action="/signup" method="post">
+                    <form th:action="@{/signup}" th:object="${usuario}" method="post">
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
                             <input type="text" id="username" name="username" class="form-control" required />
                         </div>
-                         <div class="mb-3">
+                        <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="text" id="email" name="email" class="form-control" required />
                         </div>
@@ -38,6 +29,7 @@
                             <button type="submit" class="btn btn-primary">Crear Cuenta</button>
                         </div>   
                     </form>
+                    <div th:if="${error}" class="alert alert-danger mt-3" th:text="${error}"></div>
                 </div>
             </div>
         </div>
