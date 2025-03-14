@@ -26,6 +26,7 @@ public class Usuario implements UserDetails, Serializable {
     private String username;
     private String email; 
     private String password;
+    private String telefono;
     
     public Long getId() {
         return id;
@@ -58,6 +59,15 @@ public class Usuario implements UserDetails, Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+    
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{layout/header :: head}">
+        <title>MyVlog - Perfil</title>
+        <meta charset="UTF-8"/>        
+    </head>
+    <body>
+        <div th:fragment="userProfile" class="container mt-5">
+            <div class="card">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4>Perfil de Usuario</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nombre de usuario</label>
+                        <input type="text" id="username" class="form-control" th:value="${usuario.username}" readonly="readonly" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo Electrónico</label>
+                        <input type="email" id="email" class="form-control" th:value="${usuario.email}" readonly="readonly" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="telefono" class="form-label">Teléfono</label>
+                        <input type="text" id="telefono" class="form-control" th:value="${usuario.telefono}" readonly="readonly" />
+                    </div>
+
+                    <div class="d-grid">
+                        <a th:href="@{/usuario/editar}" class="btn btn-warning">Editar Perfil</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    
+</html>
