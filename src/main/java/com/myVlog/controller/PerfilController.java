@@ -16,9 +16,9 @@ public class PerfilController {
     private UsuarioRepository usuarioRepository;
     @GetMapping("/perfil")
     public String mostrarPerfil(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        String username = userDetails.getUsername();
-        Usuario usuario = usuarioRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + username));
+        String userName = userDetails.getUsername();
+        Usuario usuario = usuarioRepository.findByUsername(userName)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + userName));
         model.addAttribute("usuario", usuario);
 
         return "perfil/perfil"; 

@@ -4,7 +4,7 @@
  */
 package com.myVlog.repository;
 
-import com.myVlog.domain.Usuario;
+import com.myVlog.domain.Rol;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,7 +12,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Marcos
  */
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    Optional<Usuario> findByUsername(String username);
-    Optional<Usuario> findByCorreo(String correo); // Nuevo método: buscar por email
+public interface RolRepository extends JpaRepository<Rol, Long>{
+    Optional<Rol>findByNombre(String nombre);
 }

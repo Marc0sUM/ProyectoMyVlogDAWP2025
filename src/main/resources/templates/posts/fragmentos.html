@@ -6,7 +6,7 @@
         <meta charset="UTF-8"/>        
 
     </head>
-    <body>
+   <body>
         <div th:fragment="postForm" class="container mt-5">
             <div class="card">
                 <div class="card-header bg-primary text-white text-center">
@@ -16,20 +16,28 @@
                     <form th:action="@{/posts/create}" method="post" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="titulo" class="form-label">Título</label>
-                            <input type="text" id="titulo" name="titulo" class="form-control" required />
+                           <input type="text" id="titulo" name="titulo" class="form-control" required="required" />
                         </div>
 
                         <div class="mb-3">
                             <label for="contenido" class="form-label">Contenido</label>
-                            <textarea id="contenido" name="contenido" class="form-control" rows="4" required></textarea>
+                            <textarea id="contenido" name="contenido" class="form-control" rows="4" required="required"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="categoria" class="form-label">Categoría</label>
+                            <select id="categoria" name="categoriaId" class="form-control" required="required">
+                                <option value="">Seleccione una categoría</option>
+                                <option th:each="categoria : ${categorias}" 
+                                        th:value="${categoria.id}" 
+                                        th:text="${categoria.nombre}"></option>
+                            </select>
                         </div>
 
                         <div class="mb-3">
                             <label for="image" class="form-label">Imagen</label>
-                            <input type="file" id="image" name="image" class="form-control"/>
+                            <input type="file" id="image" name="image" class="form-control" />
                         </div>
-
-                        <input type="hidden" name="user_id" th:value="${userId}" />
 
                         <div class="d-grid">
                             <button type="submit" class="btn btn-success">Publicar</button>

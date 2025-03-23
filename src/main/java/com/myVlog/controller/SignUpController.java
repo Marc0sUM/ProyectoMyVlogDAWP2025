@@ -28,7 +28,7 @@ public class SignUpController {
     @PostMapping("/signup")
     public String registrarUsuario(@ModelAttribute Usuario usuario, Model model) {
         try {
-            usuarioService.registerUser(usuario.getUsername(), usuario.getEmail(), usuario.getPassword());
+            usuarioService.registerUser(usuario.getUsername(), usuario.getCorreo(), usuario.getPassword());
             return "redirect:/login"; 
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());

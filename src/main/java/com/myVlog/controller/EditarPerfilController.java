@@ -21,9 +21,9 @@ public class EditarPerfilController {
     
     @GetMapping("/editar")
     public String mostrarFormularioEdicion(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        String username = userDetails.getUsername();
-        Usuario usuario = usuarioRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + username));
+        String userName = userDetails.getUsername();
+        Usuario usuario = usuarioRepository.findByUsername(userName)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + userName));
 
         model.addAttribute("usuario", usuario);
         return "perfil/editarPerfil"; 
@@ -31,12 +31,15 @@ public class EditarPerfilController {
     
     @PostMapping("/editar")
     public String actualizarPerfil(@AuthenticationPrincipal UserDetails userDetails, @ModelAttribute Usuario usuario) {
-        String username = userDetails.getUsername();
-        Usuario usuarioExistente = usuarioRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + username));
+        String nombreUsuario = userDetails.getUsername();
+        Usuario usuarioExistente = usuarioRepository.findByUsername(nombreUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + nombreUsuario));
         
-        usuarioExistente.setEmail(usuario.getEmail());
+        usuarioExistente.setCorreo(usuario.getCorreo());
         usuarioExistente.setTelefono(usuario.getTelefono());
+        usuarioExistente.setTelefono(usuario.getTelefono());
+        usuarioExistente.setUsername(usuario.getUsername());
+        usuarioExistente.setDescripcion(usuario.getDescripcion());
         
         usuarioRepository.save(usuarioExistente);
         return "redirect:/perfil"; 
