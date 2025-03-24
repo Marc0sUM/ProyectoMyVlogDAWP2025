@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignorar credenciales de Firebase
+src/main/resources/firebase/*.json
