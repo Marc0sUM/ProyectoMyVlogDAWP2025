@@ -4,7 +4,6 @@
  */
 package com.myVlog.service;
 
-
 import com.myVlog.domain.Rol;
 import com.myVlog.domain.Usuario;
 import com.myVlog.repository.RolRepository;
@@ -23,26 +22,24 @@ public class UsuarioService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RolRepository rolRepository;
+
     public Usuario registerUser(String userName, String correo, String password) {
         if (usuarioRepository.findByUsername(userName).isPresent()) {
             throw new RuntimeException("El nombre de usuario ya está en uso.");
         }
-    if (usuarioRepository.findByCorreo(correo).isPresent()) {
+        if (usuarioRepository.findByCorreo(correo).isPresent()) {
             throw new RuntimeException("El correo electrónico ya está en uso.");
         }
         Usuario usuario = new Usuario();
         usuario.setUsername(userName);
         usuario.setCorreo(correo);
-        usuario.setPassword(passwordEncoder.encode(password)); 
-        // Asignar un rol por defecto (por ejemplo, "usuario")
+        usuario.setPassword(passwordEncoder.encode(password));
         Rol rolUsuario = rolRepository.findByNombre("usuario")
                 .orElseThrow(() -> new RuntimeException("Rol 'usuario' no encontrado."));
         usuario.setRol(rolUsuario);
-
-        // Guardar el usuario en la base de datos
         return usuarioRepository.save(usuario);
     }
-        // Buscar un usuario por nombre de usuario
+
     public Usuario findByUsername(String userName) {
         return usuarioRepository.findByUsername(userName)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
@@ -50,14 +47,18 @@ public class UsuarioService {
 
     // Actualizar un usuario existente
     public Usuario updateUser(Usuario usuario) {
-        // Verificar si el usuario existe
         if (!usuarioRepository.existsById(usuario.getId())) {
             throw new RuntimeException("Usuario no encontrado.");
         }
         return usuarioRepository.save(usuario);
     }
 
-    // Eliminar un usuario por ID
+    // Método para buscar un usuario por su ID
+    public Usuario findById(Long id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
+    }
+
     public void deleteUser(Long id) {
         if (!usuarioRepository.existsById(id)) {
             throw new RuntimeException("Usuario no encontrado.");

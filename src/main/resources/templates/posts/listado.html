@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{layout/header :: head}">
+        <title>MyVlog</title>
+        <meta charset="UTF-8"/>        
+
+    </head>
+    <body>
+        <div th:fragment="postLista" class="container mt-5">
+            <h1 class="text-center mb-4">Listado de Publicaciones</h1>
+
+            <!-- Botón para crear nueva publicación -->
+            <div class="text-end mb-3">
+                <a th:href="@{/posts/create}" class="btn btn-success">Crear Nueva Publicación</a>
+            </div>
+
+            <!-- Listado de publicaciones -->
+            <div class="row">
+                <div th:each="publicacion : ${publicaciones}" class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <!-- Imagen de la publicación -->
+                        <img th:src="${publicacion.imagen}" class="card-img-top" alt="Imagen de la publicación"/>
+                            <div class="card-body">
+                                <!-- Título de la publicación -->
+                                <h5 class="card-title" th:text="${publicacion.titulo}"></h5>
+                                <!-- Contenido de la publicación (limitado a 100 caracteres) -->
+                                <p class="card-text" th:text="${#strings.abbreviate(publicacion.contenido, 100)}"></p>
+                                <!-- Categoría de la publicación -->
+                                <p class="text-muted" th:text="'Categoría: ' + ${publicacion.categoria.nombre}"></p>
+                                <!-- Botón para ver más detalles -->
+                                <a th:href="@{/posts/{id}(id=${publicacion.id})}" class="btn btn-primary">Ver más</a>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -10,6 +10,7 @@ import com.myVlog.domain.Usuario;
 import com.myVlog.service.CategoriaService;
 import com.myVlog.service.FirebaseStorageService;
 import com.myVlog.service.PublicacionesService;
+import com.myVlog.service.UsuarioService;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -20,10 +21,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/posts")
@@ -36,51 +39,75 @@ public class AddPostController {
     private CategoriaService categoriaService;
 
     @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
     private FirebaseStorageService firebaseStorageService;
 
     @GetMapping("/create")
-    public String mostrarFormularioCreacion(Model model) {
+    public String mostrarFormularioCreacion(Model model, Authentication authentication) {
+        // Obtener el usuario autenticado
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.findByUsername(username);
+
+        // Agregar el usuario al modelo
+        model.addAttribute("usuario", usuario);
+
+        // Agregar las categorías al modelo
         List<Categoria> categorias = categoriaService.obtenerTodasLasCategorias();
         model.addAttribute("categorias", categorias);
 
-        return "posts/addPost"; // Ruta correcta de la plantilla
+        return "posts/addPost"; // Ruta de la vista del formulario
     }
 
-    @PostMapping("/create")
-    public String crearPublicacion(
-            @RequestParam String titulo,
-            @RequestParam String contenido,
-            @RequestParam("image") MultipartFile image,
-            @RequestParam Long categoriaId,
-            BindingResult result, 
-            Model model) throws IOException {
-        
-        if (titulo.isEmpty() || contenido.isEmpty() || categoriaId == null || image.isEmpty()) {
-            model.addAttribute("error", "Todos los campos son obligatorios.");
-            return "posts/addPost"; // Ruta correcta de la plantilla
+    @GetMapping
+    public String listarPublicaciones(Model model) {
+        List<Publicaciones> publicaciones = publicacionService.obtenerTodasLasPublicaciones();
+        model.addAttribute("publicaciones", publicaciones);
+        return "posts/posts";
+    }
+
+    @PostMapping("/guardar")
+public String guardar(
+        Publicaciones publicacion,
+        @RequestParam("imagenFile") MultipartFile imagenFile,
+        @RequestParam("usuario.id") Long usuarioId, 
+        RedirectAttributes redirectAttributes
+) {
+    try {
+        Usuario usuario = usuarioService.findById(usuarioId);
+        if (usuario == null) {
+            redirectAttributes.addFlashAttribute("error", "Usuario no encontrado.");
+            return "redirect:/posts/create";
         }
 
-        Categoria categoria = categoriaService.obtenerCategoriaPorId(categoriaId);
-    
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Usuario usuario = (Usuario) authentication.getPrincipal();
-        
-        File file = firebaseStorageService.convertToFile(image);
+        publicacion.setUsuario(usuario);
 
-        String fileName = UUID.randomUUID() + "_" + image.getOriginalFilename();
+        // Asignamos un valor temporal para evitar el error en la base de datos
+        publicacion.setImagen("pendiente");
 
-        String imageUrl = firebaseStorageService.uploadFile(file, "posts", fileName);
+        // Guardamos la publicación sin imagen (ya que el campo no permite NULL)
+        publicacion = publicacionService.save(publicacion);
 
-        // Crea la publicación
-        Publicaciones publicacion = new Publicaciones();
-        publicacion.setTitulo(titulo);
-        publicacion.setContenido(contenido);
-        publicacion.setImagen(imageUrl);
-        publicacion.setCategoria(categoria); // Asigna la categoría
-        publicacion.setUsuario(usuario); // Asigna el usuario autenticado
+        // Subir la imagen si el usuario seleccionó un archivo
+        if (!imagenFile.isEmpty()) {
+            String rutaImagen = firebaseStorageService.cargaImagen(imagenFile, "publicaciones", publicacion.getId());
+            
+            if (rutaImagen == null || rutaImagen.isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "Error al subir la imagen.");
+                return "redirect:/posts/create";
+            }
 
-        publicacionService.crearPublicacion(publicacion);
+            // Asignamos la URL real de la imagen y actualizamos la publicación
+            publicacion.setImagen(rutaImagen);
+            publicacionService.save(publicacion);
+        }
 
-        return "redirect:/posts"; 
+        return "redirect:/posts";
+    } catch (Exception e) {
+        e.printStackTrace();
+        redirectAttributes.addFlashAttribute("error", "Ocurrió un error al guardar la publicación.");
+        return "redirect:/posts/create";
     }
+}
 }

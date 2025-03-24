@@ -8,10 +8,7 @@ package com.myVlog.repository;
 import com.myVlog.domain.Publicaciones;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-/**
- *
- * @author Marcos
- */
+
 public interface PublicacionesRepository extends JpaRepository<Publicaciones, Long>{
     
 }
